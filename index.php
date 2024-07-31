@@ -3,6 +3,10 @@ session_start();
 include 'config/koneksi.php';
 $queryUser = mysqli_query($koneksi, "SELECT * FROM user");
 $rowUser = mysqli_fetch_assoc($queryUser);
+$queryLevel = mysqli_query($koneksi, "SELECT * FROM level");
+$rowLevel = mysqli_fetch_assoc($queryLevel);
+$queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori");
+$rowKategori = mysqli_fetch_assoc($queryKategori);
 // echo "<h1>Selamat datang " . (isset($_SESSION['NAMA_LENGKAP']) ? $_SESSION['NAMA_LENGKAP'] : '') . "</h1>";
 ?>
 
@@ -19,7 +23,8 @@ $rowUser = mysqli_fetch_assoc($queryUser);
             /* background-color: antiquewhite !important; */
             box-shadow: 0px 0px 3px black;
         }
-        .navbar-brand{
+
+        .navbar-brand {
             color: white !important;
         }
     </style>
@@ -36,12 +41,18 @@ $rowUser = mysqli_fetch_assoc($queryUser);
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="?pg=home">Home</a>
+                            <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="?pg=user">user</a>
+                            <a class="nav-link" href="?pg=user">User</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item">
+                            <a class="nav-link" href="?pg=level">Level</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="?pg=kategori">Kategori</a>
+                        </li>
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Dropdown
                             </a>
@@ -53,10 +64,10 @@ $rowUser = mysqli_fetch_assoc($queryUser);
                                 </li>
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
-                        </li>
-                        <li class="nav-item">
+                        </li> -->
+                        <!-- <li class="nav-item">
                             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                        </li>
+                        </li> -->
                     </ul>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -72,7 +83,7 @@ $rowUser = mysqli_fetch_assoc($queryUser);
             if (file_exists('content/' . $_GET['pg'] . '.php')) {
                 include 'content/' . $_GET['pg'] . '.php';
             } else {
-                include 'content/home.php';
+                include 'index.php';
             }
         }
 
