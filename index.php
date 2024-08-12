@@ -117,14 +117,54 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
                 type: "GET",
                 dataType: "json",
                 success: function(data) {
-                    option += "<option>Pilih Buku</option>"
+                    option += "<option value=''>Pilih Buku</option>"
                     $.each(data, function(key, value) {
+                        let tahun_terbit = $('#tahun_terbit').val(value.tahun_terbit);
+                        console.log("id_kategori", id)
                         option += "<option value=" + value.id + ">" + value.judul + "</option>"
                         // console.log("valuenya: ", value);
                     });
                     $('#id_buku').html(option);
                 }
             })
+        });
+
+
+        $('#tambah_row').click(function() {
+            if ($('#id_kategori').val() == "") {
+                alert(" Mohon Pilih Kategori Buku Terlebih Dahulu");
+                return false;
+            }
+            if ($('#id_buku').val() == "") {
+                alert(" Mohon Pilih Buku Terlebih Dahulu");
+                return false;
+            }
+            let nama_kategori = $('#id_kategori').find('option:selected').text(),
+                nama_buku = $('#id_buku').find('option:selected').text(),
+                tahun_terbit = $('#tahun_terbit').val(),
+                id_kategori = $('#id_kategori').val(),
+                id_buku = $('#id_buku').val();
+
+            let tbody = $('tbody');
+            let table = "<tr>";
+            table += "<td></td>";
+            table += "<td>" + nama_kategori + " <input type='hidden' name='id_kategori[]' value='" + id_kategori + "'></td>";
+            table += "<td>" + nama_buku + "<input type='hidden' name='id_buku[]' value='" + id_buku + "'></td>";
+            table += "<td>" + tahun_terbit + "</td>";
+            table += "<td><button class='remove btn btn-sm btn-danger'>Delete</button></td>";
+            table += "</tr>";
+            tbody.append(table);
+
+            $('tbody tr').each(function(index) {
+                $(this).find('td:first').text(index + 1);
+            });
+            $('.remove').click(function() {
+                $(this).closest('tr').remove();
+                // update nomor urut
+                $('tbody tr').each(function(index) {
+                    $(this).find('td:first').text(index + 1);
+                });
+            });
         });
     </script>
 
