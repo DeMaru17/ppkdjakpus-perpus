@@ -18,11 +18,11 @@ ORDER BY id DESC");
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Transaksi Peminjaman</h4>
+                    <h4>Transaksi Pengembalian</h4>
                 </div>
                 <div class="card-body">
                     <div class="mb-3 d-flex justify-content-end">
-                        <a href="?pg=tambah-peminjaman" class="btn btn-primary">Tambah</a>
+                        <a href="?pg=tambah-pengembalian" class="btn btn-primary">Tambah</a>
                     </div>
                     <?php if (isset($_GET['tambah'])) : ?>
                         <div class="alert alert-success">Data Berhasil Ditambah</div>

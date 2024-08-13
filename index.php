@@ -2,6 +2,7 @@
 ob_start();
 session_start();
 include 'config/koneksi.php';
+include 'function/helper.php';
 
 $queryUser = mysqli_query($koneksi, "SELECT * FROM user");
 $rowUser = mysqli_fetch_assoc($queryUser);
@@ -79,7 +80,7 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link text-light" aria-disabled="true">Keluar</a>
+                            <a href="keluar.php" class="nav-link text-light" aria-disabled="true">Keluar</a>
                         </li>
                     </ul>
                     <!-- <form class="d-flex" role="search">
@@ -107,6 +108,7 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
     <script src="assets/js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
         $('#id_kategori').change(function() {
@@ -165,6 +167,21 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
                     $(this).find('td:first').text(index + 1);
                 });
             });
+        });
+
+        $('#kode_peminjaman').change(function() {
+            let id = $(this).val();
+            $.ajax({
+                url: "ajax/get-data-transaksi.php?kode_transaksi=" + id,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    $('#nama_anggota').val(data.data.nama_lengkap)
+                    $('#tanggal_pinjam').val(moment(data.data.tgl_pinjam).format('D MMM YYYY'))
+                    $('#tanggal_kembali').val(moment(data.data.tgl_kembali).format('D MMM YYYY'))
+
+                }
+            })
         });
     </script>
 

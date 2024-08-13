@@ -82,6 +82,8 @@ $kode_transaksi = "PJ" . date("dmY") . sprintf("%03s", $no_urut);
 $queryAngota = mysqli_query($koneksi, "SELECT * FROM anggota ORDER BY id DESC");
 
 $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori ORDER BY id DESC");
+$queryPeminjaman = mysqli_query($koneksi, "SELECT * FROM peminjaman WHERE status = 1 ORDER BY id DESC");
+
 
 ?>
 
@@ -189,119 +191,105 @@ if (isset($_GET['detail'])): ?>
         <div class="row justify-content-center">
             <div class="col-sm-8">
                 <div class="card">
-                    <div class="card-header">Data Peminjaman</div>
+                    <div class="card-header">Data Pengembalian</div>
                     <div class="card-body">
-                        <form action="" method="post">
-                            <div class="row mb-3">
-                                <div class="col-sm-2">
-                                    <label for="">Kode Transaksi</label>
-                                </div>
-                                <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="kode_transaksi" id="" value="<?= ($kode_transaksi ?? '') ?>" readonly>
-                                </div>
-                            </div>
-                            <form action="" method="post">
+                        <div class="mb-3 row">
+                            <div class="col-sm-6">
                                 <div class="row mb-3">
-                                    <div class="col-sm-2">
-                                        <label for="">Nama Anggota</label>
+                                    <div class="col-sm-5">
+                                        <label for="" class="form-label">Tanggal Kembali</label>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <select class="form-control" name="id_anggota" id="">
-                                            <option value="">Pilih Anggota</option>
-                                            <?php while ($rowAnggota = mysqli_fetch_assoc($queryAngota)) : ?>
-                                                <option value="<?= $rowAnggota['id'] ?>"><?= $rowAnggota['nama_lengkap'] ?></option>
-                                            <?php endwhile ?>
-                                        </select>
+                                    <div class="col-sm-7">
+                                        <input type="date" class="form-control" name="tgl_kembali" value="">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-2">
-                                        <label for="">Tanggal Pinjam</label>
+                                    <div class="col-sm-5">
+                                        <label for="" class="form-label">Nama Petugas</label>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <input type="date" class="form-control" name="tgl_pinjam" id="">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-2">
-                                        <label for="">Tanggal Kembali</label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <input type="date" class="form-control" name="tgl_kembali" id="">
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-sm-2">
-                                        <label for="">Petugas</label>
-                                    </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-7">
                                         <input type="text" class="form-control" name="" id="" value="<?= ($_SESSION['NAMA_LENGKAP'] ?? '') ?>" readonly>
                                         <input type="hidden" name="id_user" value="<?= ($_SESSION['ID_USER'] ?? '') ?>">
                                     </div>
                                 </div>
-
-                                <!-- Get data kategori buku dan buku -->
-                                <div class="row mb-3">
-                                    <div class="col-sm-2">
-                                        <label for="">Kategori Buku</label>
+                                <div class="row mb-4">
+                                    <div class="col-sm-5">
+                                        <label for="" class="form-label">Kode Peminjaman</label>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <select class="form-control" name="" id="id_kategori">
-                                            <option value="">Pilih Kategori</option>
-                                            <?php while ($rowKategori = mysqli_fetch_assoc($queryKategori)) : ?>
-                                                <option value="<?= $rowKategori['id'] ?>"><?= $rowKategori['nama_kategori'] ?></option>
+                                    <div class="col-sm-7">
+                                        <select name="id_peminjaman" id="kode_peminjaman" class="form-control">
+                                            <option value="">Pilih Kode Peminjaman</option>
+                                            <?php while ($rowPeminjaman = mysqli_fetch_assoc($queryPeminjaman)): ?>
+                                                <option value="<?php echo $rowPeminjaman['id'] ?>"><?php echo $rowPeminjaman['kode_transaksi'] ?></option>
                                             <?php endwhile ?>
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
                                 <div class="row mb-3">
-                                    <div class="col-sm-2">
-                                        <label for="">Nama Buku</label>
+                                    <div class="col-sm-5">
+                                        <label for="">Nama Anggota</label>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <select class="form-control" name="id_buku" id="id_buku">
-                                            <option value="">Pilih Buku</option>
-                                        </select>
+                                    <div class="col-sm-7">
+                                        <input placeholder="Nama Anggota" type="text" class="form-control" readonly name="" id="nama_anggota" value="">
                                     </div>
                                 </div>
-                                <input type="hidden" id="tahun_terbit">
-                                <div class="mb-5 mt-5">
-                                    <div align="right" class=" mb-3">
-                                        <button type="button" id="tambah_row" class="btn btn-primary tambah_row">Tambah</button>
+                                <div class="row mb-3">
+                                    <div class="col-sm-5">
+                                        <label for="">Tanggal Pinjam</label>
                                     </div>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Kategori Buku</th>
-                                                <th>Judul Buku</th>
-                                                <th>Tahun Terbit</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
+                                    <div class="col-sm-7">
+                                        <input placeholder="Tanggal Pinjam" type="text" class="form-control" readonly name="" id="tanggal_pinjam" value="">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-5">
+                                        <label for="">Tanggal Kembali</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <input placeholder="Tanggal Kembali" type="text" class="form-control" readonly name="" id="tanggal_kembali" value="">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kategori Buku</th>
+                                    <th>Judul Buku</th>
+                                    <th>Tahun Terbit</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr> -->
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-
-                                <div class="mb-3">
-                                    <input name="simpan" value="Simpan" type="submit" class="btn btn-primary mt-3"></input>
-                                    <a href="?pg=peminjaman" class="btn btn-danger mt-3 mx-1" id="back">Kembali</a>
-                                </div>
-                            </form>
+                            </tbody>
+                        </table>
                     </div>
 
+
+
+                    <div class="mx-3 mb-3">
+                        <input name="simpan" value="Simpan" type="submit" class="btn btn-primary mt-3"></input>
+                        <a href="?pg=peminjaman" class="btn btn-danger mt-3 mx-1" id="back">Kembali</a>
+                    </div>
+                    </form>
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
 <?php endif ?>
