@@ -6,6 +6,8 @@ LEFT JOIN user ON user.id = peminjaman.id_user
 WHERE deleted_at = 0
 ORDER BY id DESC");
 
+
+
 // while ($row = mysqli_fetch_assoc($queryPinjam)) {
 //     var_dump($row);
 //     // ...
@@ -57,9 +59,9 @@ ORDER BY id DESC");
                                     <td><?= $row['tgl_kembali'] ?></td>
                                     <td><?= getStatus($row['status']) ?></td>
                                     <td><?= $row['nama_petugas'] ?></td>
-                                    <td><a href="?pg=tambah-peminjaman&detail=<?= $row['id'] ?>" class="btn btn-sm btn-primary">Detail</a> |
+                                    <td><a href="?pg=tambah-pengembalian&detail=<?= $row['id'] ?>" class="btn btn-sm btn-primary">Detail</a>
 
-                                        <a onclick="return confirm('Apakah anda yakin akan menghapus data ini?')" href="?pg=tambah-peminjaman&delete=<?= $row['id'] ?>" class="btn btn-sm btn-danger">Delete</a>
+                                        <!-- <a onclick="return confirm('Apakah anda yakin akan menghapus data ini?')" href="?pg=tambah-peminjaman&delete=<?= $row['id'] ?>" class="btn btn-sm btn-danger">Delete</a> -->
                                     </td>
                                 </tr>
                             <?php endwhile ?>

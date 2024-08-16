@@ -1,6 +1,6 @@
 <?php
-ob_start();
 session_start();
+ob_start();
 include 'config/koneksi.php';
 include 'function/helper.php';
 
@@ -19,7 +19,7 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang, <?= $rowUser['nama_lengkap'] ?> </title>
+    <title>PERPUSTAKAAN</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -109,6 +109,7 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="assets/js/moment.js"></script>
 
     <script>
         $('#id_kategori').change(function() {
@@ -176,13 +177,60 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
                 type: "GET",
                 dataType: "json",
                 success: function(data) {
+                    // console.log("nilai sebelum di looping",data)
                     $('#nama_anggota').val(data.data.nama_lengkap)
                     $('#tanggal_pinjam').val(moment(data.data.tgl_pinjam).format('D MMM YYYY'))
                     $('#tanggal_kembali').val(moment(data.data.tgl_kembali).format('D MMM YYYY'))
 
+                    let tanggal_kembali = new moment(data.data.tgl_kembali);
+                    let tanggal_pengembalian = new moment('2024-08-16');
+                    let selisih = tanggal_pengembalian.diff(tanggal_kembali, 'days');
+                    if (selisih < 0) {
+                        selisih = 0;
+                    }
+                    let denda = 10000;
+                    let totalDenda = selisih * denda;
+                    $('.total-denda').html("<h5>Rp. " + totalDenda.toLocaleString('id-ID') + "</h5>");
+                    $('#denda').val(totalDenda);
+                    // console.log("Rp", totalDenda.toLocaleString('id-ID'));
+                    $('#terlambat').val(selisih)
+
+                    let tbody = $('tbody'),
+                        newRow = 0;
+                    $.each(data.detail_pinjam, function(index, val) {
+                        // console.log(val);
+                        newRow += "<tr>"
+                        newRow += "<td></td>"
+                        newRow += "<td>" + val.nama_kategori + "</td>"
+                        newRow += "<td>" + val.judul + "</td>"
+                        newRow += "<td>" + val.tahun_terbit + "</td>"
+                        newRow += "</tr>"
+                    });
+                    tbody.html(newRow);
+                    $('tbody tr').each(function(index) {
+                        $(this).find('td:first').text(index + 1);
+                    });
+
                 }
             })
         });
+
+
+
+        // let tanggalSekarang = new Date();
+        // let formatIndonesia = new Intl.DateTimeFormat('id-ID', {
+        //     year: 'numeric',
+        //     month: '2-digit',
+        //     day: '2-digit'
+        // }).format(tanggalSekarang);
+
+        // let tgl_kembali = $('#tanggal_kembali').val();
+        // let tgl_pengembalian = $('#tgl_pengembalian').val();
+
+        // let tanggal_kembali = new moment(tgl_kembali);
+        // let tanggal_2 = new moment('2024-08-16');
+        // let selisih = tanggal_2.diff(tanggal_kembali, 'days');
+        // console.log("selisihnya adalah", selisih);
     </script>
 
 </body>
