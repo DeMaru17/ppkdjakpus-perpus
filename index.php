@@ -24,6 +24,7 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         nav.menu {
+            /* background-color: antiquewhite !important; */
             box-shadow: 0px 0px 3px black;
         }
     </style>
@@ -231,7 +232,6 @@ $rowKategori = mysqli_fetch_assoc($queryKategori);
         // let selisih = tanggal_2.diff(tanggal_kembali, 'days');
         // console.log("selisihnya adalah", selisih);
     </script>
-
 
 </body>
 
