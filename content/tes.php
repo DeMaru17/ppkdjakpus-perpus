@@ -7,5 +7,7 @@
 </head>
 <body>
     <p>ini tes commit 1</p>
+
+    <p>ini tes commit 2</p>
 </body>
 </html>
